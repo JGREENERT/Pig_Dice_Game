@@ -117,7 +117,7 @@ var PigGameEngine = (function() {
             }
 
             //sketchy spaghetti
-            if (message.charAt(7) != currentPlayer)
+            if (message.indexOf("Player " + currentPlayer) < 0)
                 message = "Player " + currentPlayer + " donated his turn! ";
 
             message += " Incrementing player score by: " + accumulator;
@@ -145,6 +145,8 @@ var PigGameEngine = (function() {
             }
             turnNumber = 0;
             currentPlayer = 0;
+            accumulator = 0;
+            message = "New Game Started! Player " + gameOver +  " won the last game!";
             gameOver = -1;
         };
 
