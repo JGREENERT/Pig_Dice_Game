@@ -15,19 +15,36 @@
 <html>
     <h3>PigGame!</h3>
 <body>
-<div id="PlayersDiv"></div>
+<table>
+    <tr>
+        <td style="width:15%" valign="top">
+            <div id="PlayersDiv">
+            </div>
+        </td>
+        <td style="width:15%" valign="top">
+            <button style="background-color:lightgreen" onmousedown=rollDiceButtonClicked()>Roll the dice!</button>
+            <button style="background-color:lightgreen" onmousedown=endTurnButtonClicked()>End turn!</button>
+            <button onmousedown=playGameAutomagicallyInterval()>Play Game Automagically</button>
+            <button style="background-color:lightgreen" onmousedown=resetButtonClicked()>Reset Game!</button>
+        </td>
+        <td style="width:70%" valign="top">
+            <div id="GameOutput">
+                Begin rolling dice!
+            </div>
 
-<div id="GameOutput">
-    Begin rolling dice!
-</div>
+            <div id="Dice"></div>
 
-<div id="accumulatedValue">
-    Accumulated Value:
-</div>
+            <div id="accumulatedValue">
+                Accumulated Value:
+            </div>
+        </td>
+    </tr>
+</table>
 
 <script type="text/javascript">
 
-    var control = PigGameControl.init(20, 2, 100);
+    var scoreToWin = 100;
+    var control = PigGameControl.init(100, 3, scoreToWin);
     var dice = control.getAllDice();
     var players = control.getAllPlayers();
     var interval;
@@ -45,13 +62,17 @@
 
     function printPlayersScore(playerNum, toPrint) {
         document.getElementById("player" + playerNum).innerText = "Player " + playerNum + "'s score: " + toPrint;
+        document.getElementById("player" + playerNum).style.fontWeight = "bold";
 
         //current player is green background
         if (playerNum === control.getCurrentPlayerNumber()){
             document.getElementById("player" + playerNum).style.backgroundColor = "lightgreen";
         }
         else {
-            document.getElementById("player" + playerNum).style.backgroundColor = "white";
+            //document.getElementById("player" + playerNum).style.backgroundColor = "white";
+            //document.getElementById("player" + playerNum).style.backgroundColor = "red";
+            var bgColor = new RGBA(0,0,255,(toPrint / scoreToWin));
+            document.getElementById("player" + playerNum).style.backgroundColor = bgColor.getCSS();//(toPrint / scoreToWin);
         }
     }
 
@@ -90,11 +111,29 @@
 
     }
 
+    function updateDice() {
+        var dice = control.getAllDice();
+        var diceDiv = document.getElementById("Dice");
+        diceDiv.innerHTML = "";
+        for (var $d=0; $d < control.getNumberOfDice(); $d++) {
+            //var child = document.createElement("div");
+            //child.style.width = "100px";
+            //child.style.height = "100px";
+            //child.float = "left";
+            var image = document.createElement("img");
+            image.src = "Dice" + dice[$d].getValue() + ".jpg";
+            //child.appendChild(image);
+            diceDiv.appendChild(image);
+            //diceDiv.appendChild(child);
+        }
+    }
+
     function rollDiceButtonClicked() {
         control.rollDice();
         printGameOutput();
         printScores();
         updateAccumulator();
+        updateDice();
     }
 
     function endTurnButtonClicked() {
@@ -111,7 +150,7 @@
     }
 
     function playGameAutomagicallyInterval() {
-        interval = setInterval(playGameAutomagically, 50);
+        interval = setInterval(playGameAutomagically, 1);
 
     }
 
@@ -123,11 +162,23 @@
         clearInterval(interval);
     }
 
+    //color methods stolen off of stack overflow :)
+    function RGBA(red,green,blue,alpha) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.alpha = alpha;
+        this.getCSS = function() {
+            return "rgba("+this.red+","+this.green+","+this.blue+","+this.alpha+")";
+        }
+    }
+
+    function setBgOpacity(elem, opac) {
+        bgColor.alpha = opac;
+        elem.style.backgroundColor = bgColor.getCSS();
+    }
+
 </script>
 
-<button style="background-color:lightgreen" onmousedown=rollDiceButtonClicked()>Roll the dice!</button>
-<button style="background-color:lightgreen" onmousedown=endTurnButtonClicked()>End turn!</button>
-<button onmousedown=playGameAutomagicallyInterval()>Play Game Automagically</button>
-<button style="background-color:lightgreen" onmousedown=resetButtonClicked()>Reset Game!</button>
 </body>
 </html>
