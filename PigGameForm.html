@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<script type="text/javascript">
+    var createInnerForm = function (event) {
+        event.preventDefault();
+        var playerForm = document.createElement("form");
+        var numOfPlayers = document.getElementById("NOP").value;
+        for(var i = 0; i < numOfPlayers; i++) {
+            var playerItem = document.createElement("input");
+            playerItem.setAttribute('type', "text");
+            playerItem.setAttribute('name', 'Player' + i + 'Name');
+            playerItem.setAttribute('value', 'Player' + i);
+            playerForm.appendChild(playerItem);
+        }
+        playerForm.appendChild(document.createElement("br"));
+        var submitButton = document.createElement("input");
+        submitButton.setAttribute('type', "submit");
+        submitButton.setAttribute('name', "Play");
+        submitButton.setAttribute('value', "Play");
+        playerForm.appendChild(submitButton);
+        document.getElementById("Inner Form").appendChild(playerForm);
+        document.getElementById("Inner Form").addEventListener("submit", startGame);
+    };
+
+    var startGame = function(event){
+        event.preventDefault();
+        console.log("It works");
+    }
+</script>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<fieldset style="width: 50%">
+    <div id="Outer Form">
+        <form style="width: 100%">
+            <code>Number of Players</code>
+            <input type="text" name="NOP" id="NOP" value="4"><br/>
+            <code>Points to Win</code>
+            <input type="text" name="PTW" id="PTW" value="100"><br/>
+            <code>Number of Dice</code>
+            <input type="text" name="NOD" id="NOD" value="2"><br/>
+            <input type="submit" name="submit" value="Set"><br/>
+        </form><br/>
+    </div>
+    <div id="Inner Form"></div>
+</fieldset>
+</body>
+</html>
+<script type="text/javascript">
+    document.getElementById("Outer Form").addEventListener("submit", createInnerForm);
+</script>
