@@ -4,77 +4,120 @@
 <script src="PigGameEngine.js"></script>
 <script src="PigGameControl.js"></script>
 <script type="text/javascript">
-    var flag = false;
+    var set = false;
+    var error = false;
+
+    function validateInput(event) {
+        event.preventDefault();
+        if (!set) {
+            var message = document.getElementById("Error").childNodes;
+
+            /*Resetting Error Message*/
+            if (error) {
+                document.getElementById("Error").removeChild(message[0]);
+            }
+
+            /*Getting Form Values*/
+            var NOP = document.getElementById("NOP").value;
+            var PTW = document.getElementById("PTW").value;
+            var NOD = document.getElementById("NOD").value;
+
+            /*Input is not a Number*/
+            if (isNaN(NOP) || isNaN(PTW) || isNaN(NOD)) {
+                console.log("Not a Number");
+                setErrorMessage("Please make sure all fields are a number");
+            }
+            /*Input is Negative*/
+            else if (NOP < 0 || PTW < 0 || NOD < 0) {
+                console.log("Is Negative");
+                setErrorMessage("Please make sure all fields contain a Positive number");
+            }
+
+            /*Input is a Decimal*/
+            else if (NOP % 1 != 0 || PTW % 1 != 0 || NOD % 1 != 0) {
+                console.log("Is a Decimal");
+                setErrorMessage("Please make sure all fields contain a Whole number");
+            }
+
+            else if(NOP == "" || PTW == "" || NOD == "")
+            {
+                console.log("Is empty");
+                setErrorMessage("Please make sure all fields contain a value");
+            }
+            else {
+                error = false;
+                createInnerForm();
+            }
+        }
+        else
+            resetForm();
+
+    };
 
     /*
-     *   Changes the functionality and name of the set
-     *   button to reset and vise versa.
-     */
-    function updateSetButton()
+    *   Sets the error message for a specified error
+    */
+    function setErrorMessage(message)
     {
-        var outerForm = document.getElementById("Outer Form");
-        if(flag) {
-            outerForm.removeEventListener("submit", createInnerForm);
-            outerForm.addEventListener("submit", resetInnerForm);
-            document.getElementById("submit").value = "Reset";
-        }
-        else {
-            outerForm.removeEventListener("submit", resetInnerForm);
-            outerForm.addEventListener("submit", createInnerForm);
-            document.getElementById("submit").value = "Set";
-        }
-    }
+        var NANPara = document.createElement("p");
+        NANPara.setAttribute('style', "text-shadow: 2px 2px 4px #000000; font-size:x-large; text-align:center; color: red");
+        var NANContent = document.createTextNode(message);
+        NANPara.appendChild(NANContent);
+        document.getElementById("Error").appendChild(NANPara);
+        error = true;
+    };
 
     /*
      *   Creates the form for user to insert player
      *   names and start the game.
      */
-    var createInnerForm = function (event) {
-        event.preventDefault();
-        if(!flag) {
-            /*Setting up Player Name HTML*/
-            var playerForm = document.createElement("form");
-            var numOfPlayers = document.getElementById("NOP").value;
-            for (var i = 0; i < numOfPlayers; i++) {
-                var playerItem = document.createElement("input");
-                playerItem.setAttribute('type', "text");
-                playerItem.setAttribute('name', 'Player' + i + 'Name');
-                playerItem.setAttribute('value', 'Player' + i);
-                playerForm.appendChild(playerItem);
-            }
-            /*Creating Player Name HTML and adding Play Button*/
-            playerForm.appendChild(document.createElement("br"));
-            var submitButton = document.createElement("input");
-            submitButton.setAttribute('type', "submit");
-            submitButton.setAttribute('name', "Play");
-            submitButton.setAttribute('value', "Play");
-            playerForm.appendChild(submitButton);
-            document.getElementById("Inner Form").appendChild(playerForm);
-            document.getElementById("Inner Form").addEventListener("submit", startGame);
+    var createInnerForm = function () {
 
-            /*Changing set to reset event listener*/
-            flag = true;
-            updateSetButton();
+        /*Setting up Player Name HTML*/
+        var playerForm = document.createElement("form");
+        var numOfPlayers = document.getElementById("NOP").value;
+        for (var i = 0; i < numOfPlayers; i++) {
+            var playerItem = document.createElement("input");
+            playerItem.setAttribute('type', "text");
+            playerItem.setAttribute('name', 'Player' + i + 'Name');
+            playerItem.setAttribute('id', 'Player' + i);
+            playerItem.setAttribute('value', 'Player' + i);
+            playerForm.appendChild(playerItem);
         }
+        /*Creating Player Name HTML and adding Play Button*/
+        playerForm.appendChild(document.createElement("br"));
+        var submitButton = document.createElement("input");
+        submitButton.setAttribute('type', "submit");
+        submitButton.setAttribute('name', "Play");
+        submitButton.setAttribute('value', "Play");
+        playerForm.appendChild(submitButton);
+        document.getElementById("Inner Form").appendChild(playerForm);
+        document.getElementById("Inner Form").addEventListener("submit", startGame);
+
+        /*Changing set to reset event listener*/
+        set = true;
+        document.getElementById("submit").value = "Reset";
     };
 
     /*
      *   Resets the form if a user wants to make
      *   a different selection
      */
-    var resetInnerForm = function(event)
+    var resetForm = function()
     {
-        event.preventDefault();
+        /*Resetting Outer Form Values for Reset*/
+        document.getElementById("NOP").value = "";
+        document.getElementById("PTW").value = "";
+        document.getElementById("NOD").value = "";
 
         /*Removing the Player Name HTML*/
         var InnerForm = document.getElementById("Inner Form").childNodes;
         document.getElementById("Inner Form").removeChild(InnerForm[0]);
 
         /*Changing reset to set event listener*/
-        flag = false;
-        updateSetButton();
-
-    }
+        set = false;
+        document.getElementById("submit").value = "Set";
+    };
 
     /*
      *   Starts the Game by calling the Pig Game View
@@ -83,16 +126,18 @@
     var startGame = function(event){
         event.preventDefault();
 
+        var BodyHTML = document.body.childNodes;
+
         /*Removing "Info Form" HTML*/
-        var Form = document.body.childNodes;
-        document.body.removeChild(Form[1]);
+        BodyHTML[4].style.display = 'none';
 
         /*Adding Game UI HTML*/
-        //TODO: Add the PigGameView HTML using the DOM
+        BodyHTML[6].style.display = 'block';
+
+        /*Starting Game*/
         //TODO: Start the Game
+    };
 
-
-    }
 </script>
 <html>
 <head lang="en">
@@ -101,6 +146,7 @@
 </head>
 <h3 style="font-size:xx-large; color: white; text-shadow: 2px 2px 4px #000000; text-align:center">Joe & Jesse's PigGame!</h3>
 <body background="Images/Pig_Background.jpg">
+<div id="Error"></div>
 <div id="Info Forms">
     <fieldset style="border-style: solid; border-width:15px; border-color: hotpink; width: 25%; margin:auto;">
         <legend style="font-size: xx-large; color: White; text-shadow: 2px 2px 4px #000000; text-align: center"><b><i>Player Form</i></b></legend>
@@ -118,10 +164,35 @@
         <div id="Inner Form"></div>
     </fieldset>
 </div>
-<div id="Game">
+<div id="Game" style="display: none">
+    <table>
+        <tr>
+            <td style="width:15%" valign="top">
+                <div id="PlayersDiv">
+                </div>
+            </td>
+            <td style="width:15%" valign="top">
+                <button style="background-color:lightgreen" onmousedown=rollDiceButtonClicked()>Roll the dice!</button>
+                <button style="background-color:lightgreen" onmousedown=endTurnButtonClicked()>End turn!</button>
+                <button onmousedown=playGameAutomagicallyInterval()>Play Game Automagically</button>
+                <button style="background-color:lightgreen" onmousedown=resetButtonClicked()>Reset Game!</button>
+            </td>
+            <td style="width:70%" valign="top">
+                <div id="GameOutput">
+                    Begin rolling dice!
+                </div>
+
+                <div id="Dice"></div>
+
+                <div id="accumulatedValue">
+                    Accumulated Value:
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>
 <script type="text/javascript">
-    document.getElementById("Outer Form").addEventListener("submit", createInnerForm);
+    document.getElementById("Outer Form").addEventListener("submit", validateInput);
 </script>
