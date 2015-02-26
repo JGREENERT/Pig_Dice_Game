@@ -1,3 +1,14 @@
+<?php
+/**
+ * Cookies (ONLY)
+ * Created by IntelliJ IDEA.
+ * User: Jesse Greenert
+ * Date: 2/26/2015
+ * Time: 12:57 PM
+ */
+
+
+?>
 <!DOCTYPE html>
 <script src="PigGamePlayer.js"></script>
 <script src="PigGameDice.js"></script>
