@@ -44,7 +44,7 @@
 <script type="text/javascript">
 
     var scoreToWin = 100;
-    var control = PigGameControl.init(100, 3, scoreToWin);
+    var control = PigGameControl.init(100, 2, scoreToWin);
     var dice = control.getAllDice();
     var players = control.getAllPlayers();
     var interval;
