@@ -1,19 +1,11 @@
 <!DOCTYPE html>
-<?php
-/**
- * Created by IntelliJ IDEA.
- * User: bentleyj
- * Date: 2/11/15
- * Time: 6:11 PM
- */
-?>
 <script src="PigGamePlayer.js"></script>
 <script src="PigGameDice.js"></script>
 <script src="PigGameEngine.js"></script>
 <script src="PigGameControl.js"></script>
 
 <html>
-    <h3>PigGame!</h3>
+<h3>PigGame!</h3>
 <body>
 <table>
     <tr>
@@ -121,7 +113,7 @@
             //child.style.height = "100px";
             //child.float = "left";
             var image = document.createElement("img");
-            image.src = "Dice" + dice[$d].getValue() + ".jpg";
+            image.src = "./Images/Dice" + dice[$d].getValue() + ".jpg";
             //child.appendChild(image);
             diceDiv.appendChild(image);
             //diceDiv.appendChild(child);

@@ -213,7 +213,7 @@ var PigGameEngine = (function() {
             return true;
         };
 
-
+        /*Remove this Garbage*/
         for (var p = 0; p < players_in; p++){
             addPlayer("Player " + p, p);
         }
