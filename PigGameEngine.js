@@ -98,26 +98,21 @@ var PigGameEngine = (function() {
             else{
                 //add to an accumulator
                 accumulator += sum;
-                //players[currentPlayer].incrementScore(sum);
             }
 
-//            // if player score is above the amount to win
-//            if (players[currentPlayer].getScore() >= amountToWin) {
-//                gameOver = currentPlayer.valueOf();
-//            }
             return sum;
         };
 
 
         var endTurn = function() {
             console.log("Ending turn");
-            if (isGameOver() != -1) {
-                message = "Player " + isGameOver() + " has already won!";
+            if (isGameOver() != -1){
+                message = players[gameOver].getName() + " has already won!";
                 return;
             }
 
             //sketchy spaghetti
-            if (message.indexOf(players[currentPlayer].getName() ) < 0)
+            if (message.indexOf(players[currentPlayer].getName()) < 0)
                 message = players[currentPlayer].getName()  + " donated his turn! ";
 
             message += " Incrementing player score by: " + accumulator;
@@ -213,22 +208,10 @@ var PigGameEngine = (function() {
             return true;
         };
 
-        /*Remove this Garbage*/
-        if (players_in.construcotr === Array) {
-            for (var p = 0; p < players_in; p++){
-                addPlayer(players_in[p], p);
-            }
+        
+        for (var p = 0; p < players_in.length; p++){
+            addPlayer(players_in[p], p);
         }
-        else {
-            for (var p = 0; p < players_in; p++){
-                addPlayer("Player " + p, p);
-            }
-        }
-
-
-//        for (var p = 0; p < players_in; p++){
-//            addPlayer("Player " + p, p);
-//        }
 
         for (var d = 0; d < dice_in; d++){
             addDice(6);

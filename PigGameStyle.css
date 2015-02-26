@@ -1,0 +1,66 @@
+h3 {
+    font-size:xx-large;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    text-align:center;
+
+}
+
+body {
+    background-image: url("Images/Pig_Background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+#InfoForms code {
+    font-size: x-large;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+#InfoForms legend {
+    font-size:xx-large;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    text-align:center;
+}
+
+#Settings legend {
+    font-size:xx-large;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    text-align:center;
+}
+
+#Settings code {
+    font-size: x-large;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+fieldset {
+    border-style: solid;
+    border-width:15px;
+    border-color: hotpink;
+    width: 25%;
+    margin:auto;
+}
+
+#Game {
+    display: none;
+}
+
+#Game, div {
+    font-size: large;
+    color: White;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+#Game fieldset {
+    border-style: solid; border-width:15px;
+}
+
+
+
+

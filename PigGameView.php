@@ -1,3 +1,14 @@
+<?php
+/**
+ * Cookies (ONLY)
+ * Created by IntelliJ IDEA.
+ * User: Jesse Greenert
+ * Date: 2/26/2015
+ * Time: 12:57 PM
+ */
+
+
+?>
 <!DOCTYPE html>
 <script src="PigGamePlayer.js"></script>
 <script src="PigGameDice.js"></script>
@@ -133,28 +144,30 @@
     var startGame = function(event){
         event.preventDefault();
 
-        var BodyHTML = document.body.childNodes;
-
         /*Removing "Info Form" HTML*/
-        BodyHTML[4].style.display = 'none';
-
+        document.getElementById("InfoForms").style.display = 'none';
         /*Adding Game UI HTML*/
-        BodyHTML[6].style.display = 'block';
+        document.getElementById("Game").style.display = 'block';
 
         /*Starting Game*/
         PTW = document.getElementById("PTW").value;
         var NOP = document.getElementById("NOP").value;
         var NOD = document.getElementById("NOD").value;
-        control = PigGameControl.init(NOP, NOD, PTW);
-        dice = control.getAllDice();
-        players = control.getAllPlayers();
 
+        var playerNames = [];
         for (var i = 0; i < NOP; i++) {
             var child = document.createElement("div");
-            child.id = "player" + i;
-            child.innerText = "Player " + i + "'s score: 0";
+            var name = document.getElementById("Player" + i).value;
+            child.id = name;
+            child.innerText = name + "'s score: 0";
             document.getElementById("PlayersDiv").appendChild(child);
+            playerNames.push(name)
         }
+
+        control = PigGameControl.init(playerNames, NOD, PTW);
+        dice = control.getAllDice();
+        players = control.getAllPlayers();
+        console.log(players);
 
         document.getElementById("RD").addEventListener("click", rollDiceButtonClicked);
         document.getElementById("END").addEventListener("click", endTurnButtonClicked);
@@ -166,19 +179,19 @@
         document.getElementById("GameOutput").innerHTML = control.getMessage();
     }
 
-    function printPlayersScore(playerNum, toPrint) {
-        document.getElementById("player" + playerNum).innerText = "Player " + playerNum + "'s score: " + toPrint;
-        document.getElementById("player" + playerNum).style.fontWeight = "bold";
+    function printPlayersScore(playerNameToPrint, toPrint) {
+        document.getElementById(playerNameToPrint).innerText = playerNameToPrint + "'s score: " + toPrint;
+        document.getElementById(playerNameToPrint).style.fontWeight = "bold";
 
         //current player is green background
-        if (playerNum === control.getCurrentPlayerNumber()){
-            document.getElementById("player" + playerNum).style.backgroundColor = "lightgreen";
+        if (playerNameToPrint === players[control.getCurrentPlayerNumber()].getName()){
+            document.getElementById(playerNameToPrint).style.backgroundColor = "lightgreen";
         }
         else {
-            //document.getElementById("player" + playerNum).style.backgroundColor = "white";
-            //document.getElementById("player" + playerNum).style.backgroundColor = "red";
+            //document.getElementById(playerNameToPrint).style.backgroundColor = "white";
+            //document.getElementById(playerNameToPrint).style.backgroundColor = "red";
             var bgColor = new RGBA(0,0,255,(toPrint / PTW));
-            document.getElementById("player" + playerNum).style.backgroundColor = bgColor.getCSS();//(toPrint / scoreToWin);
+            document.getElementById(playerNameToPrint).style.backgroundColor = bgColor.getCSS();//(toPrint / scoreToWin);
         }
     }
 
@@ -188,7 +201,7 @@
 
     function printScores() {
         for (var x = 0; x < control.getNumberOfPlayers(); x++) {
-            printPlayersScore(x, players[x].getScore())
+            printPlayersScore(players[x].getName(), players[x].getScore())
         }
         var playerDivs = document.getElementById("PlayersDiv").children;
         playerDivs = Array.prototype.slice.call(playerDivs, 0);
@@ -288,21 +301,22 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <link rel="stylesheet" type="text/css" href="PigGameStyle.css">
+    <title>Joe and Jesse's Pig Game</title>
 </head>
-<h3 style="font-size:xx-large; color: white; text-shadow: 2px 2px 4px #000000; text-align:center">Joe & Jesse's PigGame!</h3>
-<body background="Images/Pig_Background.jpg">
+<h3>Joe & Jesse's PigGame!</h3>
+<body>
 <div id="Error"></div>
-<div id="Info Forms">
-    <fieldset style="border-style: solid; border-width:15px; border-color: hotpink; width: 25%; margin:auto;">
-        <legend style="font-size: xx-large; color: White; text-shadow: 2px 2px 4px #000000; text-align: center"><b><i>Player Form</i></b></legend>
+<div id="InfoForms">
+    <fieldset>
+        <legend>Player Form</legend>
         <div id="Outer Form">
             <form style="width: 100%">
-                <code style="font-size: x-large; color: White; text-shadow: 2px 2px 4px #000000;"><b>Number of Players</b></code>
+                <code>Number of Players</code>
                 <input type="text" name="NOP" id="NOP" value="4"><br/>
-                <code style="font-size: x-large; color: White; text-shadow: 2px 2px 4px #000000;"><b>Points to Win</b></code>
+                <code>Points to Win</code>
                 <input type="text" name="PTW" id="PTW" value="100"><br/>
-                <code style="font-size: x-large; color: White; text-shadow: 2px 2px 4px #000000;"><b>Number of Dice</b></code>
+                <code>Number of Dice</code>
                 <input type="text" name="NOD" id="NOD" value="2"><br/>
                 <input type="submit" name="submit" id="submit" value="Set">
             </form><br/>
@@ -310,25 +324,42 @@
         <div id="Inner Form"></div>
     </fieldset>
 </div>
-<div id="Game" style="display: none">
-    <fieldset style="border-style: solid; border-width:15px; border-color: hotpink; width: 27%; margin:auto;">
-        <div id="GameOutput" style="font-size: large; color: White; text-shadow: 2px 2px 4px #000000;">
+<div id="Settings">
+    <fieldset>
+        <legend>Settings</legend>
+        <form>
+            <code>Border Colors</code><br>
+            <input type="radio" name="borderColor" value="hotpink" checked><code style="color: hotpink">Hotpink</code>
+            <br>
+            <input type="radio" name="borderColor" value="green"><code style="color: green">Green</code>
+            <br>
+            <input type="radio" name="borderColor" value="blue"><code style="color: blue">Blue</code>
+            <br>
+            <input type="radio" name="borderColor" value="red"><code style="color: red">Red</code>
+            <br>
+            <code>Preferred Name:</code> <input type="text" name="prefName">
+        </form>
+    </fieldset>
+</div><br/>
+<div id="Game">
+    <fieldset style="border-color: hotpink; width: 27%; margin:auto;">
+        <div id="GameOutput">
             Begin rolling dice!
         </div>
-        <div id="Dice" style="font-size: large; color: White; text-shadow: 2px 2px 4px #000000;"></div>
-        <div id="accumulatedValue" style="font-size: large; color: White; text-shadow: 2px 2px 4px #000000;">
+        <div id="Dice"></div>
+        <div id="accumulatedValue">
             Accumulated Value:
         </div>
     </fieldset><br/>
-    <fieldset style="border-style: solid; border-width:15px; border-color: hotpink; width: 23%; margin:auto;">
+    <fieldset style="border-color: hotpink; width: 23%; margin:auto;">
         <button style="background-color:hotpink" id="RD">Roll the dice!</button>
         <button style="background-color:hotpink" id="END">End turn!</button>
-        <div id="PlayersDiv" style="font-size: large; color: White; text-shadow: 2px 2px 4px #000000;">
+        <div id="PlayersDiv">
         </div>
     </fieldset><br/>
-    <fieldset style="border-style: solid; border-width:15px; border-color: hotpink; width: 11%; margin:auto;">
+    <fieldset style="border-color: hotpink; width: 11%; margin:auto;">
         <button style="background-color:hotpink" id="RESET">Reset Game!</button>
-        <button id="AUTO")>Automate</button>
+        <button id="AUTO">Automate</button>
     </fieldset>
 </div>
 </body>
