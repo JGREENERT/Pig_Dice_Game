@@ -28,7 +28,7 @@ var PigGameEngine = (function() {
 
             //players[num] = PigGamePlayer.init(name_in, id_in);      //don't do this, null pointer
             console.log("Added a new player in game engine!");
-            message = "Player " + num + " added to the game!";
+            message = "Player " + name_in + " added to the game!";
         };
 
         var removePlayerByName = function(name_in) {
@@ -75,7 +75,7 @@ var PigGameEngine = (function() {
         var rollDice = function() {
 
             if (isGameOver() != -1){
-                message = "Player " + isGameOver() + " has already won!";
+                message = players[gameOver].getName() + " has already won!";
                 return;
             }
 
@@ -117,8 +117,8 @@ var PigGameEngine = (function() {
             }
 
             //sketchy spaghetti
-            if (message.indexOf("Player " + currentPlayer) < 0)
-                message = "Player " + currentPlayer + " donated his turn! ";
+            if (message.indexOf(players[currentPlayer].getName() ) < 0)
+                message = players[currentPlayer].getName()  + " donated his turn! ";
 
             message += " Incrementing player score by: " + accumulator;
             players[currentPlayer].incrementScore(accumulator);
@@ -146,7 +146,7 @@ var PigGameEngine = (function() {
             turnNumber = 0;
             currentPlayer = 0;
             accumulator = 0;
-            message = "New Game Started! Player " + gameOver +  " won the last game!";
+            message = "New Game Started! " + players[gameOver].getName() +  " won the last game!";
             gameOver = -1;
         };
 
@@ -172,7 +172,7 @@ var PigGameEngine = (function() {
 
         var rollAllDice = function() {
 
-            message = "Player " + currentPlayer + " rolled: ";
+            message = players[currentPlayer].getName()  + " rolled: ";
 
             //roll all dice
             for (var y = 0; y < PigGameDice.diceCount(); y++) {
@@ -185,7 +185,7 @@ var PigGameEngine = (function() {
 
             // check if resetToZero roll occurred
             if (checkResetToZeroRoll()) {
-                message = "Player " + currentPlayer + " crapped out!";
+                message = players[currentPlayer].getName()  + " crapped out!";
                 return 2;
             }
 
@@ -214,13 +214,26 @@ var PigGameEngine = (function() {
         };
 
         /*Remove this Garbage*/
-        for (var p = 0; p < players_in; p++){
-            addPlayer("Player " + p, p);
+        if (players_in.construcotr === Array) {
+            for (var p = 0; p < players_in; p++){
+                addPlayer(players_in[p], p);
+            }
         }
+        else {
+            for (var p = 0; p < players_in; p++){
+                addPlayer("Player " + p, p);
+            }
+        }
+
+
+//        for (var p = 0; p < players_in; p++){
+//            addPlayer("Player " + p, p);
+//        }
 
         for (var d = 0; d < dice_in; d++){
             addDice(6);
         }
+
 
 
         return {

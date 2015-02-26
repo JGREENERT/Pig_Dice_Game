@@ -196,13 +196,13 @@
             var val = -1;
             if (a.nodeName === "DIV" && b.nodeName === "DIV") {
 
-                //sort by player score value, (highest on top)
+                //sort by player score value, (highest on top)s
                 val = ((b.innerHTML.split(":")[1]) - (a.innerHTML.split(":")[1]));
             }
-            if (val === 0){
 
-                // in the event of a tie in value, we sort by player number (lowest on top)
-                return ((a.innerHTML.split(/[ ']+/)[1]) - (b.innerHTML.split(/[ ']+/)[1]));
+            //in the event of a tie in score, sort by player alphabetically
+            if (val == 0) {
+                return (b.innerText < a.innerText);
             }
             return val;
         });

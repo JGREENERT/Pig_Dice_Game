@@ -34,7 +34,7 @@ var PigGameDice = (function(){
 
         incrementDiceCount();
 
-        //everything in return is public
+        //everything in return are public methods of individual dice.
         return {
             roll : roll,
             setRange : setRange,
@@ -43,6 +43,7 @@ var PigGameDice = (function(){
         }
     };
 
+    //public methods of PigGameDice
     return {
         diceCount: getDiceCount,
         init: init
