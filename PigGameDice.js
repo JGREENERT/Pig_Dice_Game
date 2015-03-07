@@ -5,7 +5,7 @@
 var PigGameDice = (function(){
     var diceCount = 0;
     var incrementDiceCount = function () {
-        diceCount ++;
+        diceCount++;
     };
     var getDiceCount = function () {
         return diceCount;
@@ -17,6 +17,11 @@ var PigGameDice = (function(){
         var range = range_in;
         var roll = function() {
             value = Math.floor((Math.random() * range) + 1);
+            return value;
+        };
+
+        var rollSpecificValue = function(value_in) {
+            value = Math.floor((value_in * range) + 1);
             return value;
         };
 
@@ -36,6 +41,7 @@ var PigGameDice = (function(){
 
         //everything in return are public methods of individual dice.
         return {
+            rollSpecificValue : rollSpecificValue,
             roll : roll,
             setRange : setRange,
             getRange : getRange,
