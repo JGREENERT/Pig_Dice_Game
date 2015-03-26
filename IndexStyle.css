@@ -1,0 +1,41 @@
+body {
+    background-image: url("Images/Pig_Background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+fieldset {
+    border-style: solid;
+    border-width:15px;
+    border-color: hotpink;
+    width: 25%;
+    margin:auto;
+}
+
+h3 {
+    font-size:xx-large;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    text-align:center;
+
+}
+
+form {
+    text-align: center;
+    font-size:large;
+    color: black;
+    text-shadow: 2px 2px 4px #FFFFFF;
+}
+
+legend {
+    font-size:x-large;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+input, button {
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+}
