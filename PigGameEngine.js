@@ -17,7 +17,7 @@ var PigGameEngine = (function() {
         var currentPlayer = 0;
         var amountToWin = amountToWin_in;
         var accumulator = 0;
-        var message = "";
+        var message = "Welcome to our PigGame!";
 
         /*****************************************************************************************
          * Public Player Methods
@@ -99,6 +99,36 @@ var PigGameEngine = (function() {
                 //add to an accumulator
                 accumulator += sum;
             }
+            return sum;
+        };
+
+        var rollSpecificValues = function(roll_value) {
+
+            if (isGameOver() != -1){
+                message = players[gameOver].getName() + " has already won!";
+                return;
+            }
+
+            console.log("Rolling dice");
+            var sum = roll_value;
+
+            if (sum == 2) {
+                //reset to zero occurred
+                players[currentPlayer].resetScore();
+                accumulator = 0;
+                sum = 0;
+                endTurn();
+                return sum;
+            }
+            if (sum == 0){
+                //user rolled a 1
+                accumulator = 0;
+                endTurn();
+            }
+            else{
+                //add to an accumulator
+                accumulator += sum;
+            }
 
             return sum;
         };
@@ -161,6 +191,14 @@ var PigGameEngine = (function() {
             return message;
         };
 
+        var getTurnNumber = function() {
+            return turnNumber;
+        };
+
+        var getAmountToWin = function() {
+            return amountToWin;
+        };
+
         /*****************************************************************************************
          * Private Game Engine code to Play the game.
          *****************************************************************************************/
@@ -218,7 +256,6 @@ var PigGameEngine = (function() {
         }
 
 
-
         return {
             //public player methods
             addPlayer : addPlayer,
@@ -234,8 +271,11 @@ var PigGameEngine = (function() {
             getAllDice : getAllDice,
 
             //public game methods
+            getAmountToWin: getAmountToWin,
             endTurn : endTurn,
+            getTurnNumber: getTurnNumber,
             rollDice : rollDice,
+            rollSpecificValues : rollSpecificValues,
             getAccumulator: getAccumulator,
             isGameOver : isGameOver,
             resetGame : resetGame,
