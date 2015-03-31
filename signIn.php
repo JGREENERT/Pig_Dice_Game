@@ -47,7 +47,6 @@ else {
     //TODO: Send to PigGameSelect
 }
 mysqli_close($link);
-
 ?>
 </body>
 </html>
