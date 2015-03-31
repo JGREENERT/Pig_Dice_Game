@@ -18,7 +18,7 @@
         expect(player.getId()).toEqual(50);
     });
 
-    it("should be able to get a score", function () {
+    it("should be able to get a default score", function () {
         expect(player.getScore()).toEqual(0);
     });
 
