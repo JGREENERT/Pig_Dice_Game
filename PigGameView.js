@@ -188,6 +188,9 @@ var PigGameView = (function() {
             document.getElementById("END").addEventListener("click", endTurnButtonClicked);
             document.getElementById("RESET").addEventListener("click", resetButtonClicked);
             document.getElementById("AUTO").addEventListener("click", playGameAutomagicallyInterval);
+
+
+
         };
 
         /*Prints Current Process to Screen*/
