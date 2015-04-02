@@ -1,4 +1,66 @@
 <!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="SelectStyle.css">
+    <title>Joe and Jesse's Pig Game</title>
+</head>
+<h3>Joe & Jesse's PigGame!</h3>
+
+<?php
+
+function signIn()
+{
+    $link = mysqli_connect("cis.gvsu.edu", "greenerj", "greenerj1234", "greenerj");
+
+    if(mysqli_connect_errno()){
+        echo mysqli_connect_error();
+        exit();
+    }
+
+    $pos = 0;
+    foreach ($_POST as $value) {
+        $container[$pos] = $value;
+        $pos++;
+    }
+
+    $user = $container[0]."";
+    $password = $container[1]."";
+
+    $user = mysqli_real_escape_string($link, $user);
+    $password = mysqli_real_escape_string($link, $password);
+
+    $results = mysqli_query($link, "SELECT *
+    FROM pigDB
+    WHERE uName='$user' AND pWord='$password'")
+    or die(mysqli_error($link));
+
+    if($results->num_rows == 0) {
+        header('Location: Error.html');
+        //echo "Incorrect Username or Password";
+    }
+
+    else {
+        mysqli_query($link, "UPDATE pigDB
+        SET loggedOn=1
+        WHERE uName='$user'")
+        or die(mysqli_error($link));
+
+        //echo("User Signed in<br>");
+    }
+    mysqli_close($link);
+
+    echo "<h1 id=uName style=visibility: hidden>";
+    echo $user."";
+    echo "<h1>";
+}
+
+if(isset($_POST))
+{
+    signIn();
+}
+?>
+
 <script src="PigGameView.js"></script>
 <script src="PigGamePlayer.js"></script>
 <script src="PigGameDice.js"></script>
@@ -9,27 +71,26 @@
     /*Initializing the View*/
     var PGV = PigGameView.init();
     var preferredColor;
-    var preferredName;
+    var preferredName = document.getElementById("uName").textContent;
+    console.log(preferredName);
 
     /*
-    * Gets previous settings preferences if the
-    * browser hasn't been closed since last visit to
-    * the page.
+     * Gets previous settings preferences if the
+     * browser hasn't been closed since last visit to
+     * the page.
      */
     function getCookie()
     {
         var cookie = document.cookie;
         console.log(cookie);
         var settings = cookie.split(";");
-        console.log(settings[0]);
         var values = settings[0].split("=");
 
-        if(values[0] == "name") {
+        if (values[0] == "name") {
             preferredName = values[1];
             preferredColor = values[3];
             console.log(preferredName);
             console.log(preferredColor);
-
 
             document.getElementById("pName").value = preferredName;
             var radioButtons = document.getElementsByName("borderColor");
@@ -39,10 +100,12 @@
             }
             updateBorderColor();
         }
+        else
+            document.getElementById("pName").value = preferredName;
     }
 
     /*
-    * Updates the Border Color with a Color Specified
+     * Updates the Border Color with a Color Specified
      * in the Settings Form.
      */
     function updateBorderColor() {
@@ -59,13 +122,6 @@
             }
     }
 </script>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="SelectStyle.css">
-    <title>Joe and Jesse's Pig Game</title>
-</head>
-<h3>Joe & Jesse's PigGame!</h3>
 <body>
 <div id="Error"></div>
 <div id="InfoForms">
@@ -79,7 +135,9 @@
                 <input type="text" name="PTW" id="PTW" value="100"><br/>
                 <code>Number of Dice</code>
                 <input type="text" name="NOD" id="NOD" value="2"><br/>
-                <button id="submit">Set</button>
+                <button id="submit"><code style=" font-size: small;
+    color: White;
+    text-shadow: 2px 2px 4px #000000;">Set</code></button>
             </form><br/>
         </div>
         <div id="Inner Form"></div>
@@ -98,7 +156,7 @@
             <br>
             <input type="radio" name="borderColor" value="red" onclick="updateBorderColor()"><code style="color: red">Red</code>
             <br>
-            <code>Preferred Name:</code> <input type="text" id="pName" name="prefName" value="Player 0">
+            <code>User Name:</code> <input type="text" id="pName" name="prefName" readonly="readonly">
         </form>
     </fieldset>
 </div><br/>
@@ -113,14 +171,22 @@
         </div>
     </fieldset><br/>
     <fieldset style="border-color: hotpink; width: 23%; margin:auto;">
-        <button id="RD">Roll the dice!</button>
-        <button id="END">End turn!</button>
+        <button id="RD"><code style=" font-size: small;
+    color: White;
+    text-shadow: 2px 2px 4px #000000;">Roll the dice!</code></button>
+        <button id="END"><code style=" font-size: small;
+    color: White;
+    text-shadow: 2px 2px 4px #000000;">End turn!</code></button>
         <div id="PlayersDiv">
         </div>
     </fieldset><br/>
     <fieldset style="border-color: hotpink; width: 11%; margin:auto;">
-        <button id="RESET">Reset Game!</button>
-        <button id="AUTO">Automate</button>
+        <button id="RESET"><code style=" font-size: small;
+    color: White;
+    text-shadow: 2px 2px 4px #000000;">Reset Game!</code></button>
+        <button id="AUTO"><code style=" font-size: small;
+    color: White;
+    text-shadow: 2px 2px 4px #000000;">Automate</code></button>
     </fieldset>
 </div>
 </body>

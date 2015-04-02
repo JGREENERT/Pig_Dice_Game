@@ -13,12 +13,6 @@ body {
     background-attachment: fixed;
 }
 
-#InfoForms code {
-    font-size: x-large;
-    color: white;
-    text-shadow: 2px 2px 4px #000000;
-}
-
 #InfoForms legend {
     font-size:xx-large;
     color: white;
@@ -31,12 +25,6 @@ body {
     color: white;
     text-shadow: 2px 2px 4px #000000;
     text-align:center;
-}
-
-#Settings code {
-    font-size: x-large;
-    color: white;
-    text-shadow: 2px 2px 4px #000000;
 }
 
 fieldset {
@@ -63,6 +51,12 @@ fieldset {
 
 button {
     background-color: hotpink;
+}
+
+code {
+    font-size: small;
+    color: White;
+    text-shadow: 2px 2px 4px #000000;
 }
 
 
