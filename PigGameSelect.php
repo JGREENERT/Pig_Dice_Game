@@ -6,9 +6,7 @@
     <title>Joe and Jesse's Pig Game</title>
 </head>
 <h3>Joe & Jesse's PigGame!</h3>
-
 <?php
-
 function signIn()
 {
     $link = mysqli_connect("cis.gvsu.edu", "greenerj", "greenerj1234", "greenerj");
@@ -36,8 +34,7 @@ function signIn()
     or die(mysqli_error($link));
 
     if($results->num_rows == 0) {
-        header('Location: Error.html');
-        //echo "Incorrect Username or Password";
+        header('Location: index.php?error=true');
     }
 
     else {
@@ -102,6 +99,11 @@ if(isset($_POST))
         }
         else
             document.getElementById("pName").value = preferredName;
+    }
+
+    function deleteCookie()
+    {
+        document.cookie = " ";
     }
 
     /*
@@ -189,9 +191,24 @@ if(isset($_POST))
     text-shadow: 2px 2px 4px #000000;">Automate</code></button>
     </fieldset>
 </div>
+<div id="logOut">
+    <form action="logOut.php" method="post">
+        <input style="visibility: hidden" type="text" name="uName" readonly="readonly"></br>
+        <button></button>
+    </form>
+</div>
 </body>
 </html>
 <script type="text/javascript">
     getCookie();
+
+    /*Set up Log Out Button*/
+    var currentUser = document.getElementById("pName").value;
+    var logOut = document.getElementById("logOut");
+    logOut.getElementsByTagName("button")[0].textContent = "Log Out: " + currentUser;
+    logOut.getElementsByTagName("input")[0].value = currentUser;
+    logOut.addEventListener("click", deleteCookie);
+
+    /*Validate Input in the View*/
     document.getElementById("Outer Form").addEventListener("submit", PGV.validateInput);
 </script>
