@@ -57,6 +57,10 @@ fieldset {
 
 button {
     background-color: hotpink;
+    font-size: medium;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    text-align:center;
 }
 
 code {

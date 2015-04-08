@@ -9,17 +9,18 @@
 <body>
 <div id="Error">
     <?php
-    $pos = 0;
-    foreach ($_GET as $value) {
-        $container[$pos] = $value;
-        $pos++;
-    }
-    $code = $container[0]."";
-    if($code == "true")
-    {
-        echo "<code style=visibility: hidden>";
-        echo "true";
-        echo "</code>";
+    if(isset($_GET)) {
+        $pos = 0;
+        foreach ($_GET as $value) {
+            $container[$pos] = $value;
+            $pos++;
+        }
+        $code = $container[0] . "";
+        if ($code == "true") {
+            echo "<code style=visibility: hidden>";
+            echo "true";
+            echo "</code>";
+        }
     }
     ?>
 </div>
@@ -51,7 +52,8 @@
         document.getElementById("Error").appendChild(NANPara);
         error = true;
     }
-    var Error = document.getElementById("Error").getElementsByTagName("code")[0].textContent;
+    if(document.getElementById("Error").getElementsByTagName("code")[0] != undefined)
+        var Error = document.getElementById("Error").getElementsByTagName("code")[0].textContent;
     if(Error == "true")
     {
         setErrorMessage("Incorrect Username or Password");

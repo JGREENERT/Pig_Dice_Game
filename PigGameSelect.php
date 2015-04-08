@@ -101,9 +101,11 @@ if(isset($_POST))
             document.getElementById("pName").value = preferredName;
     }
 
+    /*Sets the cookie to expire now*/
     function deleteCookie()
     {
-        document.cookie = " ";
+        document.cookie += "; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+        console.log(document.cookie);
     }
 
     /*
@@ -207,7 +209,7 @@ if(isset($_POST))
     var logOut = document.getElementById("logOut");
     logOut.getElementsByTagName("button")[0].textContent = "Log Out: " + currentUser;
     logOut.getElementsByTagName("input")[0].value = currentUser;
-    logOut.addEventListener("click", deleteCookie);
+    logOut.addEventListener("submit", deleteCookie);
 
     /*Validate Input in the View*/
     document.getElementById("Outer Form").addEventListener("submit", PGV.validateInput);
