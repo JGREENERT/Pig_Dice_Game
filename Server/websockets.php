@@ -23,8 +23,6 @@ abstract class WebSocketServer {
     socket_listen($this->master,20)                               or die("Failed: socket_listen()");
     $this->sockets['m'] = $this->master;
     $this->stdout("Server started\nListening on: $addr:$port\nMaster socket: ".$this->master);
-
-    
   }
 
   abstract protected function process($user,$message); // Called immediately when the data is recieved. 

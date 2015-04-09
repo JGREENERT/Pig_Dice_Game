@@ -67,7 +67,7 @@ var PigGameView = (function() {
                     error = false;
                     createInnerForm();
                 }
-            }
+            } 
             else
                 resetForm();
         };
@@ -298,7 +298,6 @@ var PigGameView = (function() {
         /*Auto Play Game Button Specifications*/
         function playGameAutomagicallyInterval() {
             interval = setInterval(playGameAutomagically, 1);
-
         }
 
         /*Reset Game Button*/
