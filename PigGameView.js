@@ -103,14 +103,18 @@ var PigGameView = (function() {
                 playerItem.setAttribute('type', "text");
                 playerItem.setAttribute('name', 'Player' + i + 'Name');
                 playerItem.setAttribute('id', 'Player' + i);
-                playerItem.setAttribute('value', 'Player ' + i);
+                playerItem.setAttribute('value', " ");
+                playerItem.setAttribute('readonly', "readonly");
                 playerForm.appendChild(playerItem);
             }
             /*Creating Player Name HTML and adding Play Button*/
             playerForm.appendChild(document.createElement("br"));
             var submitButton = document.createElement("button");
             submitButton.style.backgroundColor = preferredColor;
-            submitButton.innerHTML = "Play";
+            var codeText = document.createElement("code");
+            codeText.style.cssText =  'font-size:small;color:White;text-shadow: 2px 2px 4px #000000;';
+            codeText.innerHTML = "Play";
+            submitButton.appendChild(codeText);
             playerForm.appendChild(submitButton);
             document.getElementById("Inner Form").appendChild(playerForm);
             document.getElementById("Inner Form").addEventListener("submit", startGame);
@@ -123,7 +127,7 @@ var PigGameView = (function() {
 
             /*Changing set to reset event listener*/
             set = true;
-            document.getElementById("submit").innerHTML = "Reset";
+            document.getElementById("submit").children[0].textContent = "Reset";
         };
 
         /*
@@ -145,7 +149,7 @@ var PigGameView = (function() {
 
             /*Changing reset to set event listener*/
             set = false;
-            document.getElementById("submit").innerHTML = "Set";
+            document.getElementById("submit").children[0].textContent = "Set";
         };
 
         /*
