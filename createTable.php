@@ -7,7 +7,7 @@
 /*Creating the mysql Table*/
 function createTable()
 {
-    $link = mysqli_connect("cis.gvsu.edu", "greenerj", "greenerj1234", "greenerj");
+    $link = mysqli_connect("eos11.cis.gvsu.edu", "greenerj", "greenerj1234", "greenerj");
 
     if(mysqli_connect_errno()){
         echo mysqli_connect_error();
