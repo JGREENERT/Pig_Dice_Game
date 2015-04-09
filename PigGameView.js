@@ -89,6 +89,9 @@ var PigGameView = (function() {
          *   names and start the game.
          */
         var createInnerForm = function () {
+
+            //TODO: Call Server to set up Room
+
             /*Hiding the Settings Box*/
             document.getElementById("Settings").style.display = 'none';
 
@@ -135,6 +138,9 @@ var PigGameView = (function() {
          *   a different selection
          */
         var resetForm = function () {
+
+            //TODO: Kick everyone out of room and back to setUp View
+
             /*Resetting Outer Form Values for Reset*/
             document.getElementById("NOP").value = "";
             document.getElementById("PTW").value = "";
@@ -157,12 +163,15 @@ var PigGameView = (function() {
          *   and creating the UI by manipulating the DOM
          */
         var startGame = function (event) {
+
+            //TODO: Send message to everyone that game is starting and to update their views to the appropriate screen
+
             event.preventDefault();
 
             setCookie();
 
-            /*Removing "Info Form" HTML*/
-            document.getElementById("InfoForms").style.display = 'none';
+            /*Hiding "setUp" HTML*/
+            document.getElementById("setUp").style.display = 'none';
 
             /*Adding Game UI HTML*/
             document.getElementById("Game").style.display = 'block';
@@ -188,13 +197,11 @@ var PigGameView = (function() {
             players = control.getAllPlayers();
             console.log(players);
 
+            //TODO: Instead of hooking up these buttons, wait for server response
             document.getElementById("RD").addEventListener("click", rollDiceButtonClicked);
             document.getElementById("END").addEventListener("click", endTurnButtonClicked);
             document.getElementById("RESET").addEventListener("click", resetButtonClicked);
             document.getElementById("AUTO").addEventListener("click", playGameAutomagicallyInterval);
-
-
-
         };
 
         /*Prints Current Process to Screen*/

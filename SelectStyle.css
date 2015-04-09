@@ -19,18 +19,30 @@ body {
     background-attachment: fixed;
 }
 
-#InfoForms legend {
+#Left legend, #Right legend  {
+    font-size:large;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    text-align:center;
+}
+
+#Left {
+    float: left;
+    width: 50%;
     font-size:xx-large;
     color: white;
     text-shadow: 2px 2px 4px #000000;
     text-align:center;
 }
 
-#Settings legend {
+#Right {
+    float: right;
+    width: 50%;
     font-size:xx-large;
     color: white;
     text-shadow: 2px 2px 4px #000000;
     text-align:center;
+
 }
 
 fieldset {
@@ -64,7 +76,7 @@ button {
 }
 
 code {
-    font-size: small;
+    font-size: large;
     color: White;
     text-shadow: 2px 2px 4px #000000;
 }
