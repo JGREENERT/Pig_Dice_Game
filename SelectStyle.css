@@ -1,3 +1,9 @@
+#logOut
+{
+    width: 100%;
+    text-align: center;
+}
+
 h3 {
     font-size:xx-large;
     color: white;
@@ -13,12 +19,6 @@ body {
     background-attachment: fixed;
 }
 
-#InfoForms code {
-    font-size: x-large;
-    color: white;
-    text-shadow: 2px 2px 4px #000000;
-}
-
 #InfoForms legend {
     font-size:xx-large;
     color: white;
@@ -31,12 +31,6 @@ body {
     color: white;
     text-shadow: 2px 2px 4px #000000;
     text-align:center;
-}
-
-#Settings code {
-    font-size: x-large;
-    color: white;
-    text-shadow: 2px 2px 4px #000000;
 }
 
 fieldset {
@@ -63,6 +57,16 @@ fieldset {
 
 button {
     background-color: hotpink;
+    font-size: medium;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    text-align:center;
+}
+
+code {
+    font-size: small;
+    color: White;
+    text-shadow: 2px 2px 4px #000000;
 }
 
 
