@@ -1,0 +1,3 @@
+<!ELEMENT users (user)*>
+    <!ELEMENT user (username)>
+        <!ELEMENT username (#PCDATA)>

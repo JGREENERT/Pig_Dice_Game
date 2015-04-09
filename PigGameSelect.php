@@ -128,42 +128,55 @@ if(isset($_POST))
 </script>
 <body>
 <div id="Error"></div>
-<div id="InfoForms">
-    <fieldset>
-        <legend>Player Form</legend>
-        <div id="Outer Form">
-            <form style="width: 100%">
-                <code>Number of Players</code>
-                <input type="text" name="NOP" id="NOP" value="4"><br/>
-                <code>Points to Win</code>
-                <input type="text" name="PTW" id="PTW" value="100"><br/>
-                <code>Number of Dice</code>
-                <input type="text" name="NOD" id="NOD" value="2"><br/>
-                <button id="submit"><code style=" font-size: small;
+<div id="Left">
+    <div id="InfoForms">
+        <fieldset>
+            <legend>Player Form</legend>
+            <div id="Outer Form">
+                <form style="width: 100%">
+                    <code>Number of Players</code>
+                    <input type="text" name="NOP" id="NOP" value="4"><br/>
+                    <code>Points to Win</code>
+                    <input type="text" name="PTW" id="PTW" value="100"><br/>
+                    <code>Number of Dice</code>
+                    <input type="text" name="NOD" id="NOD" value="2"><br/>
+                    <button id="submit"><code style=" font-size: small;
     color: White;
     text-shadow: 2px 2px 4px #000000;">Set</code></button>
-            </form><br/>
-        </div>
-        <div id="Inner Form"></div>
-    </fieldset>
-</div>
-<div id="Settings">
-    <fieldset>
-        <legend>Settings</legend>
-        <form>
-            <code>Border Colors</code><br>
-            <input type="radio" name="borderColor" value="hotpink" onclick="updateBorderColor()"><code style="color: hotpink">Hotpink</code>
-            <br>
-            <input type="radio" name="borderColor" value="green" onclick="updateBorderColor()"><code style="color: green">Green</code>
-            <br>
-            <input type="radio" name="borderColor" value="blue" onclick="updateBorderColor()"><code style="color: blue">Blue</code>
-            <br>
-            <input type="radio" name="borderColor" value="red" onclick="updateBorderColor()"><code style="color: red">Red</code>
-            <br>
-            <code>User Name:</code> <input type="text" id="pName" name="prefName" readonly="readonly">
+                </form><br/>
+            </div>
+            <div id="Inner Form"></div>
+        </fieldset>
+    </div>
+    <div id="Settings">
+        <fieldset>
+            <legend>Settings</legend>
+            <form>
+                <code>Border Colors</code><br>
+                <input type="radio" name="borderColor" value="hotpink" onclick="updateBorderColor()"><code style="color: hotpink">Hotpink</code>
+                <br>
+                <input type="radio" name="borderColor" value="green" onclick="updateBorderColor()"><code style="color: green">Green</code>
+                <br>
+                <input type="radio" name="borderColor" value="blue" onclick="updateBorderColor()"><code style="color: blue">Blue</code>
+                <br>
+                <input type="radio" name="borderColor" value="red" onclick="updateBorderColor()"><code style="color: red">Red</code>
+                <br>
+                <code>User Name:</code> <input type="text" id="pName" name="prefName" readonly="readonly">
+            </form>
+        </fieldset>
+    </div><br/>
+    <div id="logOut">
+        <form action="logOut.php" method="post">
+            <input style="visibility: hidden" type="text" name="uName" readonly="readonly"></br>
+            <button></button>
         </form>
-    </fieldset>
-</div><br/>
+    </div>
+</div>
+<div id="right">
+    <div id="playersOnline">
+        <p>Hello</p>
+    </div>
+</div>
 <div id="Game">
     <fieldset style="border-color: hotpink; width: 27%; margin:auto;">
         <div id="GameOutput">
@@ -193,12 +206,6 @@ if(isset($_POST))
     text-shadow: 2px 2px 4px #000000;">Automate</code></button>
     </fieldset>
 </div>
-<div id="logOut">
-    <form action="logOut.php" method="post">
-        <input style="visibility: hidden" type="text" name="uName" readonly="readonly"></br>
-        <button></button>
-    </form>
-</div>
 </body>
 </html>
 <script type="text/javascript">
@@ -213,4 +220,28 @@ if(isset($_POST))
 
     /*Validate Input in the View*/
     document.getElementById("Outer Form").addEventListener("submit", PGV.validateInput);
+
+    var updateOnlinePlayers = function(html)
+    {
+        document.getElementById("playersOnline").innerHTML = html;
+    };
+
+    var getOnlinePlayers = function()
+    {
+        console.log("AJAX");
+        var ajax = new XMLHttpRequest();
+        ajax.open("GET", 'createXML.php');
+        ajax.onreadystatechange = function()
+        {
+            if(ajax.readyState == 4)
+            {
+                console.log(ajax.responseText);
+                updateOnlinePlayers(ajax.responseText);
+            }
+        };
+        ajax.send();
+    };
+
+    window.setInterval(getOnlinePlayers, 5000);
+
 </script>
