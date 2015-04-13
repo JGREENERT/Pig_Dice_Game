@@ -7,15 +7,13 @@
  */
 
 class Room {
-    private $name;
     private $numOfPlayers;
     private $numOfDice;
     private $scoreToWin;
     private $ownerName;
     private $users = array();
 
-    function __construct($name, $numOfPlayers, $numOfDice, $scoreToWin, $ownerName) {
-        $this->name = $name;
+    function __construct($numOfPlayers, $numOfDice, $scoreToWin, $ownerName) {
         $this->numOfPlayers = $numOfPlayers;
         $this->numOfDice = $numOfDice;
         $this->scoreToWin = $scoreToWin;
@@ -31,19 +29,11 @@ class Room {
         unset($this->users[$user->id]);
     }
 
-    public function setName($name) {
-        $this->name = $name;
-    }
-
-    public function getName() {
-        return $this->$name;
-    }
-
     public function setNumOfPlayers($numOfPlayers) {
         $this->numOfPlayers = $numOfPlayers;
     }
 
-    public function getNumOfPlayers($numOfPlayers) {
+    public function getNumOfPlayers() {
         return $this->numOfPlayers;
     }
 
@@ -51,7 +41,7 @@ class Room {
         $this->numOfDice = $numOfDice;
     }
 
-    public function getNumOfDice($numOfDice) {
+    public function getNumOfDice() {
         return $this->numOfDice;
     }
 

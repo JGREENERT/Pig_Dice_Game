@@ -21,7 +21,11 @@
 
         function init() {
             //var host = "ws://127.0.0.1:9000/echobot"; // SET THIS TO YOUR SERVER
-            var host = "ws://148.61.162.203:9000/";
+//            var host = "ws://127.0.0.1:9000/"; // SET THIS TO YOUR SERVER
+            var host = "ws://148.61.162.207:9000/";
+//            var host = "ws://localhost:9000/";
+            log(host);
+            console.log(host);
             try {
                 socket = new WebSocket(host);
                 log('WebSocket - status ' + socket.readyState);
