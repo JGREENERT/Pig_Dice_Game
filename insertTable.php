@@ -30,12 +30,12 @@ $password = mysqli_real_escape_string($link, $password);
 
 
 $results = mysqli_query($link, "SELECT *
-    FROM pigDB
+    FROM Users
     WHERE uName='$user'")
 or die(mysqli_error($link));
 
 if($results->num_rows == 0) {
-    mysqli_query($link, "INSERT INTO pigDB (uName, pWord)
+    mysqli_query($link, "INSERT INTO Users (uName, pWord)
     VALUES ('$user', '$password')")
     or die(mysqli_error($link));
 

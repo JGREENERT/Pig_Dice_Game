@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: bentleyj
+ * User: greenerj
  * Date: 4/9/15
  * Time: 3:02 PM
  */
@@ -19,19 +19,19 @@ class RoomsJoinedDAO {
     FOREIGN KEY (uName) REFERENCES Users(uName),
     PRIMARY KEY (id, uName)
     )";
-    private $deleteSQL = "DROP TABLE bentleyj.RoomsJoined";
+    private $deleteSQL = "DROP TABLE greenerj.RoomsJoined";
 
     private function connect()
     {
         // Create an mysqli object connected to the database.
-        $connection = new mysqli("127.0.0.1", "bentleyj", "bentleyj1234");
+        $connection = new mysqli("cis.gvsu.edu", "greenerj", "greenerj1234");
 
         // Complain if the the connection fails.  (This would have to be more graceful
         // in a production environment)
         if (!$connection || $connection->connect_error) {
             die('Unable to connect to database [' . $connection->connect_error . ']');
         }
-        $connection->select_db("bentleyj");
+        $connection->select_db("greenerj");
         return $connection;
     }
 
@@ -63,7 +63,7 @@ class RoomsJoinedDAO {
 
     public function insertIntoTable($id, $userName)
     {
-        $insertSQL = "INSERT INTO bentleyj.RoomsJoined (id, uName) values ('$id', '$userName')";
+        $insertSQL = "INSERT INTO greenerj.RoomsJoined (id, uName) values ('$id', '$userName')";
 
         $c = $this->connect();
         if (mysqli_query($c, $insertSQL)) {
@@ -76,7 +76,7 @@ class RoomsJoinedDAO {
 
     public function deleteFromTableWithUsername($username)
     {
-        $deleteSQL = "DELETE FROM bentleyj.RoomsJoined rj WHERE rj.username = $username";
+        $deleteSQL = "DELETE FROM greenerj.RoomsJoined rj WHERE rj.username = $username";
         $c = $this->connect();
         if (mysqli_query($c, $deleteSQL)) {
             //echo "Delete Successful<br>";
@@ -88,7 +88,7 @@ class RoomsJoinedDAO {
 
     public function deleteFromTableWithId($id)
     {
-        $deleteSQL = "DELETE FROM bentleyj.RoomsJoined rj WHERE rj.id = $id";
+        $deleteSQL = "DELETE FROM greenerj.RoomsJoined rj WHERE rj.id = $id";
         $c = $this->connect();
         if (mysqli_query($c, $deleteSQL)) {
             //echo "Delete Successful<br>";
@@ -100,7 +100,7 @@ class RoomsJoinedDAO {
 
     public function selectStar()
     {
-        $selectStarSQL = "SELECT * FROM bentleyj.RoomsJoined";
+        $selectStarSQL = "SELECT * FROM greenerj.RoomsJoined";
         $c = $this->connect();
         return $c->query($selectStarSQL);
     }

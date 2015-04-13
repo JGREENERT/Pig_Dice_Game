@@ -29,7 +29,7 @@ function signIn()
     $password = mysqli_real_escape_string($link, $password);
 
     $results = mysqli_query($link, "SELECT *
-    FROM pigDB
+    FROM Users
     WHERE uName='$user' AND pWord='$password'")
     or die(mysqli_error($link));
 
@@ -38,7 +38,7 @@ function signIn()
     }
 
     else {
-        mysqli_query($link, "UPDATE pigDB
+        mysqli_query($link, "UPDATE Users
         SET loggedOn=1
         WHERE uName='$user'")
         or die(mysqli_error($link));

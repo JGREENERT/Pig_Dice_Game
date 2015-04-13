@@ -23,7 +23,7 @@ echo $user."";
 
 $user = mysqli_real_escape_string($link, $user);
 
-mysqli_query($link, "UPDATE pigDB
+mysqli_query($link, "UPDATE Users
         SET loggedOn=0
         WHERE uName='$user'")
 or die(mysqli_error($link));

@@ -7,7 +7,7 @@ if(mysqli_connect_errno()){
 }
 
 $results = mysqli_query($link, "SELECT uName
-    FROM pigDB
+    FROM Users
     WHERE loggedOn='1'")
 or die(mysqli_error($link));
 

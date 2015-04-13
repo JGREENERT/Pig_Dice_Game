@@ -126,7 +126,7 @@ class echoServer extends WebSocketServer
 
 //$echo = new echoServer("0.0.0.0", "9000");
 //$echo = new echoServer("127.0.0.1", "9000");
-$echo = new echoServer("148.61.162.207", "9000");
+$echo = new echoServer("148.61.162.203", "9000");
 //$echo = new echoServer("localhost", "9000");
 
 

@@ -14,7 +14,7 @@ function createTable()
         exit();
     }
 
-    mysqli_query($link, "DROP TABLE pigDB") or die(mysqli_error($link));
+    mysqli_query($link, "DROP TABLE Users") or die(mysqli_error($link));
 
     echo("Table Dropped<br>");
 

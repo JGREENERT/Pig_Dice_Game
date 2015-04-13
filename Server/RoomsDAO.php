@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by IntelliJ IDEA.
- * User: bentleyj
+ * User: greenerj
  * Date: 4/9/15
  * Time: 9:37 AM
  */
@@ -19,14 +19,14 @@ class RoomsDAO {
     scoreToWin INT(6),
     ownerName VARCHAR(64) NOT NULL
     )";
-    private $deleteSQL = "DROP TABLE bentleyj.Rooms";
+    private $deleteSQL = "DROP TABLE greenerj.Rooms";
 
     private function connect()
     {
         // Create an mysqli object connected to the database.
         echo "before connection\n";
-        $connection = new mysqli("127.0.0.1", "bentleyj", "bentleyj1234");
-//        $connection = new mysqli("127.0.0.1", "bentleyj", "bentleyj1234", "bentleyj", 3306);
+        $connection = new mysqli("cis.gvsu.edu", "greenerj", "greenerj1234");
+//        $connection = new mysqli("127.0.0.1", "greenerj", "greenerj1234", "greenerj", 3306);
         echo "after connection\n";
 
         // Complain if the the connection fails.  (This would have to be more graceful
@@ -34,7 +34,7 @@ class RoomsDAO {
         if (!$connection || $connection->connect_error) {
             die('Unable to connect to database [' . $connection->connect_error . ']');
         }
-        $connection->select_db("bentleyj");
+        $connection->select_db("greenerj");
         return $connection;
     }
 
@@ -66,7 +66,7 @@ class RoomsDAO {
 
     public function insertIntoTable($numOfPlayers, $numOfDice, $scoreToWin, $ownerName)
     {
-        $insertSQL = "INSERT INTO bentleyj.Rooms (numOfPlayers, numOfDice, scoreToWin, ownerName) values ('$numOfPlayers', '$numOfDice', '$scoreToWin', '$ownerName')";
+        $insertSQL = "INSERT INTO greenerj.Rooms (numOfPlayers, numOfDice, scoreToWin, ownerName) values ('$numOfPlayers', '$numOfDice', '$scoreToWin', '$ownerName')";
 
         $c = $this->connect();
         if (mysqli_query($c, $insertSQL)) {
@@ -79,13 +79,13 @@ class RoomsDAO {
 
     public function selectStar()
     {
-        $selectStarSQL = "SELECT * FROM bentleyj.Rooms";
+        $selectStarSQL = "SELECT * FROM greenerj.Rooms";
         $c = $this->connect();
         return $c->query($selectStarSQL);
     }
 
     public function selectWhereUserNameEquals($userName) {
-        $selectUser = "SELECT * FROM bentleyj.Rooms r WHERE r.ownerName = $$userName";
+        $selectUser = "SELECT * FROM greenerj.Rooms r WHERE r.ownerName = $$userName";
         $c = $this->connect();
         return $c->query($selectUser);
     }
