@@ -15,7 +15,8 @@ class echoServer extends WebSocketServer
     private $roomsDAO;
     private $roomsJoinedDAO;
 
-    function __construct($addr, $port) {
+    function __construct($addr, $port)
+    {
         parent::__construct($addr, $port);
         $this->roomsDAO = new RoomsDAO();
         $this->roomsJoinedDAO = new RoomsJoinedDAO();
@@ -26,7 +27,7 @@ class echoServer extends WebSocketServer
         $split = explode(":", $message);
         $command = $split[0];
 
-        if ($command == "admin create table command"){
+        if ($command == "admin create table command") {
             echo "admin create table command entered\n";
             echo $this->roomsDAO->createTable();
             echo $this->roomsJoinedDAO->createTable();
@@ -40,62 +41,118 @@ class echoServer extends WebSocketServer
         }
 
         $values = $split[1];
+        $count = count($this->rooms);
 
-        if (isset($this->rooms[$values]) !== true) {
+        switch ($command) {
+            case "create room":
+                $this->createRoom($user, $values);
+                break;
 
-            //these commands are for if the key does NOT exist
-            switch ($command) {
-                case "create room":
-                    echo "creating new room $values \n";
-                    $this->rooms[$values] = new Room(2, 2, 100, "Bentleyj");
-                    $this->rooms[$values]->addUser($user);
-                    $this->send($user, "Creating Room: $values");
-                    $this->roomsDAO->insertIntoTable(2, 2, 100, "Bentleyj");
-                    break;
-                default:
-                    echo "That room does not exist, can't execute $command \n";
-                    $this->send($user, "That room does not exist, can't execute $command");
-            }
-        } else {
+            case "join room":
 
-            //these commands are for if the key exists
-            switch ($command) {
-                case "create room":
-                    echo "room $values already exists\n";
-                    $this->send($user, "Room $values already exists");
-                    break;
-                case "join room":
-                    echo "join room $values \n";
-                    $this->rooms[$values]->addUser($user);
-                    $this->send($user, "Joining room: $values");
-                    break;
-                case "leave room":
-                    echo "leave room $values \n";
-                    $this->send($user, "Leave room: $values");
-                    // if we are the owner of the room, delete the room
-                    if ($this->rooms[$values]->getOwnerName() == $user->name){
+                break;
 
-                    }
-                    else {
-                        //remove just the user
-                        $this->rooms[$values]->removeUser($user);
-                    }
-                    break;
-                case "delete room":
-                    echo "delete room $values \n";
-                    unset($this->rooms[$values]);
-                    $this->send($user, "Deleting room: $values");
-                    break;
-                default:
-                    echo "default case \n";
-            }
+            case "delete room":
+
+                break;
+
+            case "start game":
+                $this->sendMessageToAllClientsInTheSameRoomName("start game", $values);
+                break;
+
+            case "end turn":
+                $this->sendMessageToAllClientsInTheSameRoomName("end turn", $values);
+                break;
+
+            case "roll dice":
+                $this->sendMessageToAllClientsInTheSameRoomName("roll dice", $values);
+                break;
+
+            case "my name is":
+                $name = $split[1];
+                $user->name = $name;
+                break;
+
+            default:
+
+                break;
         }
 
-        //var_dump($this->rooms);
+        /*
+        switch ($command) {
+            case "create room":
+                echo "creating new room $values \n";
+                $this->rooms[$values] = new Room(2, 2, 100, "Bentleyj");
+                $this->rooms[$values]->addUser($user);
+                $this->send($user, "room created: $values");
+                $this->roomsDAO->insertIntoTable(2, 2, 100, "Bentleyj");
+                break;
+            case "join room":
+                echo "join room $values \n";
+                $this->rooms[$values]->addUser($user);
+                //$this->send($user, "Joining room: $values");
+                break;
+            case "leave room":
+                echo "leave room $values \n";
+                $this->send($user, "Leave room: $values");
+                // if we are the owner of the room, delete the room
+                if ($this->rooms[$values]->getOwnerName() == $user->name) {
 
-        //foreach ($this->users as $user2) {
-        //    $this->send($user2, $message);
-        //}
+                } else {
+                    //remove just the user
+                    $this->rooms[$values]->removeUser($user);
+                }
+                break;
+            case "delete room":
+                echo "delete room $values \n";
+                unset($this->rooms[$values]);
+                $this->send($user, "Deleting room: $values");
+                break;
+            case "end turn":
+                break;
+            default:
+                echo "default case \n";
+        }
+        */
+    }
+
+    //var_dump($this->rooms);
+
+    //foreach ($this->users as $user2) {
+    //    $this->send($user2, $message);
+    //}
+
+    private function createRoom($user, $roomInfo) {
+        echo "creating new room\n";
+        $split = explode($roomInfo, ",");
+        $NOP = $split[0];
+        $PTW = $split[1];
+        $NOD = $split[2];
+        $roomOwner = $split[3];
+        $roomNumber = $this->roomsDAO->insertIntoTable($NOP, $NOD, $PTW, $roomOwner); // DAO SQL structure slightly diff than view
+        $this->rooms[$roomNumber] = new Room($NOP, $PTW, $NOD, $roomOwner);
+
+        $this->joinRoom($user, $roomNumber);
+        $this->send($user, "room created:$roomNumber");
+    }
+
+    private function joinRoom($user, $roomNumber){
+        $this->rooms[$roomNumber]->addUser($user);
+        $this->roomsJoinedDAO->insertIntoTable($roomNumber, $user->name);
+    }
+
+    private function leaveRoom($user, $roomNumber) {
+        $this->rooms[$roomNumber]->removeUser($user);
+    }
+
+    private function deleteRoom($user, $roomNumber) {
+
+    }
+
+    private function sendMessageToAllClientsInTheSameRoomName($message, $roomNumber) {
+        foreach ($this->rooms[$roomNumber]->users as $user2) {
+            $this->send($user2, $message);
+        }
     }
 
     protected function connected($user)
@@ -103,10 +160,6 @@ class echoServer extends WebSocketServer
         // Do nothing: This is just an echo server, there's no need to track the user.
         // However, if we did care about the users, we would probably have a cookie to
         // parse at this step, would be looking them up in permanent storage, etc.
-
-        /*
-         * Parse cookie (session stuff)
-         */
     }
 
     protected function closed($user)
@@ -126,7 +179,7 @@ class echoServer extends WebSocketServer
 
 //$echo = new echoServer("0.0.0.0", "9000");
 //$echo = new echoServer("127.0.0.1", "9000");
-$echo = new echoServer("148.61.162.203", "9000");
+$echo = new echoServer("148.61.162.206", "9000");
 //$echo = new echoServer("localhost", "9000");
 
 

@@ -13,7 +13,7 @@ class Room {
     private $ownerName;
     private $users = array();
 
-    function __construct($numOfPlayers, $numOfDice, $scoreToWin, $ownerName) {
+    function __construct($numOfPlayers, $scoreToWin, $numOfDice, $ownerName) {
         $this->numOfPlayers = $numOfPlayers;
         $this->numOfDice = $numOfDice;
         $this->scoreToWin = $scoreToWin;
@@ -27,6 +27,10 @@ class Room {
 
     public function removeUser($user) {
         unset($this->users[$user->id]);
+    }
+
+    public function getUsers() {
+        return $this->users;
     }
 
     public function setNumOfPlayers($numOfPlayers) {

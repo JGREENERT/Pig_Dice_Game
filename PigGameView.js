@@ -1,5 +1,4 @@
 "use strict";
-
 var PigGameView = (function() {
     var init = function() {
         var set = false;
@@ -11,6 +10,61 @@ var PigGameView = (function() {
         var PTW;
         var preferredColor;
         var preferredName;
+        var roomNumber = -1;
+        var socket;
+
+        var host = "ws://148.61.162.206:9000/";
+        socket = new WebSocket(host);
+        socket.onopen = function (msg) {
+            console.log("Welcome - status " + this.readyState);
+        };
+        socket.onmessage = function (msg) {
+            var split = msg.split(":");
+            var command = split[0];
+            var values = split[1];
+            console.log(msg);
+            switch (command) {
+                case "start game":
+                    console.log("received start game");
+                    //go to view and start game
+                    //values should contain a random seed for dice
+
+                    break;
+
+                case "room full":
+                    console.log("received room full");
+                    //display error saying room is full
+                    break;
+
+                case "room created":
+                    console.log("received room created");
+                    roomNumber = values;
+                    break;
+
+                case "end turn":
+                    console.log("received end turn");
+                    //call end turn
+                    break;
+
+                case "roll dice":
+                    console.log("received roll dice");
+                    //call roll dice
+                    break;
+
+                case "owner left":
+                    console.log("received owner left");
+                    //reset to lobby
+                    break;
+
+                default:
+                    console.log("received default case");
+            }
+
+        };
+        socket.onclose = function (msg) {
+            console.log("Disconnected - status " + this.readyState);
+        };
+
 
         /*
          * Sets a cookie with the specified form
@@ -91,6 +145,7 @@ var PigGameView = (function() {
         var createInnerForm = function () {
 
             //TODO: Call Server to set up Room
+            socket.send("create room");
 
             /*Hiding the Settings Box*/
             document.getElementById("Settings").style.display = 'none';
@@ -165,6 +220,8 @@ var PigGameView = (function() {
         var startGame = function (event) {
 
             //TODO: Send message to everyone that game is starting and to update their views to the appropriate screen
+            socket.send("start game:" + roomNumber);
+
 
             event.preventDefault();
 

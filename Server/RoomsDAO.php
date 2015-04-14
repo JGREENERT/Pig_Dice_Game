@@ -71,10 +71,10 @@ class RoomsDAO {
         $c = $this->connect();
         if (mysqli_query($c, $insertSQL)) {
             //echo "Insert Successful<br>";
+            return $this->selectLastInsertID();
         } else {
-            return "Error inserting! : " . mysqli_error($c) . "\n";
+            //echo "Error inserting! : " . mysqli_error($c) . "\n";
         }
-        return "Insert Successful";
     }
 
     public function selectStar()
@@ -82,6 +82,12 @@ class RoomsDAO {
         $selectStarSQL = "SELECT * FROM greenerj.Rooms";
         $c = $this->connect();
         return $c->query($selectStarSQL);
+    }
+
+    public function selectLastInsertID() {
+        $selectSQL = "SELECT LAST_INSERT_ID()";
+        $c = $this->connect();
+        return $c->query($selectSQL);
     }
 
     public function selectWhereUserNameEquals($userName) {

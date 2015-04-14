@@ -34,7 +34,7 @@ abstract class WebSocketServer {
     // the handshake has completed.
   }
   
-  protected function send($user,$message) {
+  protected function send($user, $message) {
     //$this->stdout("> $message");
     $message = $this->frame($message,$user);
     $result = @socket_write($user->socket, $message, strlen($message));

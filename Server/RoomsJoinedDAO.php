@@ -68,10 +68,11 @@ class RoomsJoinedDAO {
         $c = $this->connect();
         if (mysqli_query($c, $insertSQL)) {
             //echo "Insert Successful<br>";
+            return $this->selectLastInsertID();
         } else {
             return "Error inserting! : " . mysqli_error($c) . "\n";
         }
-        return "Insert Successful";
+        //return "Insert Successful";
     }
 
     public function deleteFromTableWithUsername($username)
@@ -96,6 +97,12 @@ class RoomsJoinedDAO {
             return "Error deleting! : " . mysqli_error($c) . "\n";
         }
         return "Delete Successful";
+    }
+
+    public function selectLastInsertID() {
+        $selectSQL = "SELECT LAST_INSERT_ID()";
+        $c = $this->connect();
+        return $c->query($selectSQL);
     }
 
     public function selectStar()
