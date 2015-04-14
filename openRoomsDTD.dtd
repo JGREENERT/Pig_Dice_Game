@@ -1,0 +1,4 @@
+<!ELEMENT rooms (room)*>
+    <!ELEMENT room (id, owner)>
+        <!ELEMENT id (#PCDATA)>
+        <!ELEMENT owner (#PCDATA)>

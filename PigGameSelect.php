@@ -233,22 +233,44 @@ if(isset($_POST))
         document.getElementById("playersOnline").innerHTML = html;
     };
 
+    var updateOpenRooms = function(html)
+    {
+      document.getElementById("gameRooms").innerHTML = html;
+    };
+
     var getOnlinePlayers = function()
     {
-        console.log("AJAX");
+        console.log("Player AJAX");
         var ajax = new XMLHttpRequest();
-        ajax.open("GET", 'createXML.php');
+        ajax.open("GET", 'playerXML.php');
         ajax.onreadystatechange = function()
         {
             if(ajax.readyState == 4)
             {
-                console.log(ajax.responseText);
                 updateOnlinePlayers(ajax.responseText);
+                console.log(ajax.responseText);
+            }
+        };
+        ajax.send();
+    };
+
+    var getOpenRooms = function()
+    {
+        console.log("Room AJAX");
+        var ajax = new XMLHttpRequest();
+        ajax.open("GET", 'roomXML.php');
+        ajax.onreadystatechange = function()
+        {
+            if(ajax.readyState == 4)
+            {
+                updateOpenRooms(ajax.responseText);
+                console.log(ajax.responseText);
             }
         };
         ajax.send();
     };
 
     window.setInterval(getOnlinePlayers, 5000);
+    window.setInterval(getOpenRooms, 10000);
 
 </script>
