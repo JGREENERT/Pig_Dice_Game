@@ -17,7 +17,7 @@ if($results->num_rows == 0)
 /*Creating XML*/
 $xmlData = "<?xml version='1.0'?>";
 $xmlData = $xmlData."<?xml-stylesheet type='text/xsl' href='onlinePlayersStyle.xsl'?>";
-$xmlData = $xmlData."<!DOCTYPE users SYSTEM 'users.dtd'>";
+$xmlData = $xmlData."<!DOCTYPE users SYSTEM 'onlinePlayersDTD.dtd'>";
 $xmlData = $xmlData."<users>";
 while($row = mysqli_fetch_assoc($results))
 {
