@@ -5,7 +5,13 @@
                 <xsl:for-each select="rooms/room">
                     <tr>
                         <td><xsl:value-of select="owner"/></td>
-                        <td><xsl:value-of select="id"/></td>
+                        <td>
+                            <input type="button" value="join" name="openRooms">
+                                <xsl:attribute name="id">
+                                    <xsl:value-of select="id"/>
+                                </xsl:attribute>
+                            </input>
+                        </td>
                     </tr>
                 </xsl:for-each>
             </table>

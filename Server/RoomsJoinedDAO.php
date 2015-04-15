@@ -68,7 +68,7 @@ class RoomsJoinedDAO {
         $c = $this->connect();
         if (mysqli_query($c, $insertSQL)) {
             //echo "Insert Successful<br>";
-            return $this->selectLastInsertID();
+            return mysqli_insert_id($c);
         } else {
             return "Error inserting! : " . mysqli_error($c) . "\n";
         }
@@ -77,7 +77,7 @@ class RoomsJoinedDAO {
 
     public function deleteFromTableWithUsername($username)
     {
-        $deleteSQL = "DELETE FROM greenerj.RoomsJoined rj WHERE rj.username = $username";
+        $deleteSQL = "DELETE FROM greenerj.RoomsJoined rj WHERE rj.uName = $username";
         $c = $this->connect();
         if (mysqli_query($c, $deleteSQL)) {
             //echo "Delete Successful<br>";

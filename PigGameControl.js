@@ -52,6 +52,10 @@ var PigGameControl = (function () {
             return engine.getNumberOfDice();
         };
 
+        var setDiceSeeds = function(seed_in) {
+            return engine.setDiceSeeds(seed_in);
+        };
+
         /*****************************************************************************************
          * Public Game Logic Methods
          *****************************************************************************************/
@@ -103,6 +107,7 @@ var PigGameControl = (function () {
             addDice: addDice,
             getNumberOfDice: getNumberOfDice,
             getAllDice: getAllDice,
+            setDiceSeeds : setDiceSeeds,
 
             //public game methods
             endTurn: endTurn,

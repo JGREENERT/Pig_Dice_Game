@@ -71,7 +71,7 @@ class RoomsDAO {
         $c = $this->connect();
         if (mysqli_query($c, $insertSQL)) {
             //echo "Insert Successful<br>";
-            return $this->selectLastInsertID();
+            return mysqli_insert_id($c);
         } else {
             //echo "Error inserting! : " . mysqli_error($c) . "\n";
         }
@@ -91,7 +91,7 @@ class RoomsDAO {
     }
 
     public function selectWhereUserNameEquals($userName) {
-        $selectUser = "SELECT * FROM greenerj.Rooms r WHERE r.ownerName = $$userName";
+        $selectUser = "SELECT * FROM greenerj.Rooms r WHERE r.ownerName = $userName";
         $c = $this->connect();
         return $c->query($selectUser);
     }

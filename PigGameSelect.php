@@ -235,12 +235,24 @@ if(isset($_POST))
 
     var updateOpenRooms = function(html)
     {
-      document.getElementById("gameRooms").innerHTML = html;
+        document.getElementById("gameRooms").innerHTML = html;
+        //console.log(document.getElementsByName("openRooms"));
+        var openRoomsID = document.getElementsByName("openRooms");
+        for(var i = 0; i < openRoomsID.length; i++)
+        {
+            //console.log(openRoomsID[i].id);
+            openRoomsID[i].addEventListener("click", sendJoin);
+        }
     };
+
+    function sendJoin() {
+        var roomNumber = this.id;
+        PGV.sendJoin(roomNumber, event);
+    }
 
     var getOnlinePlayers = function()
     {
-        console.log("Player AJAX");
+        //console.log("Player AJAX");
         var ajax = new XMLHttpRequest();
         ajax.open("GET", 'playerXML.php');
         ajax.onreadystatechange = function()
@@ -248,7 +260,7 @@ if(isset($_POST))
             if(ajax.readyState == 4)
             {
                 updateOnlinePlayers(ajax.responseText);
-                console.log(ajax.responseText);
+                //console.log(ajax.responseText);
             }
         };
         ajax.send();
@@ -264,13 +276,13 @@ if(isset($_POST))
             if(ajax.readyState == 4)
             {
                 updateOpenRooms(ajax.responseText);
-                console.log(ajax.responseText);
+                //console.log(ajax.responseText);
             }
         };
         ajax.send();
     };
 
     window.setInterval(getOnlinePlayers, 5000);
-    window.setInterval(getOpenRooms, 10000);
+    window.setInterval(getOpenRooms, 5000);
 
 </script>

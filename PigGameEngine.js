@@ -246,6 +246,12 @@ var PigGameEngine = (function() {
             return true;
         };
 
+        var setDiceSeeds = function(seed_in) {
+            for (var i = 0; i < PigGameDice.diceCount(); i++) {
+                dice[i].setSeed(seed_in+i);
+            }
+        };
+
         
         for (var p = 0; p < players_in.length; p++){
             addPlayer(players_in[p], p);
@@ -269,6 +275,7 @@ var PigGameEngine = (function() {
             addDice : addDice,
             getNumberOfDice : getNumberOfDice,
             getAllDice : getAllDice,
+            setDiceSeeds : setDiceSeeds,
 
             //public game methods
             getAmountToWin: getAmountToWin,

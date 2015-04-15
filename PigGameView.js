@@ -17,18 +17,17 @@ var PigGameView = (function() {
         socket = new WebSocket(host);
         socket.onopen = function (msg) {
             console.log("Welcome - status " + this.readyState);
+            socket.send("my name is:" + document.getElementById("pName").value);
         };
         socket.onmessage = function (msg) {
-            var split = msg.split(":");
+            console.log("client socket.onMessage = " + msg.data);
+            var split = msg.data.split(":");
             var command = split[0];
             var values = split[1];
-            console.log(msg);
             switch (command) {
                 case "start game":
                     console.log("received start game");
-                    //go to view and start game
-                    //values should contain a random seed for dice
-
+                    startGame();
                     break;
 
                 case "room full":
@@ -36,24 +35,35 @@ var PigGameView = (function() {
                     //display error saying room is full
                     break;
 
+                case "joined room":
+                    console.log("joined room: " + values);
+                    var roomInfo = values.split(",");
+                    roomNumber = roomInfo[0];
+                    document.getElementById("NOP").value = roomInfo[1];
+                    document.getElementById("PTW").value = roomInfo[2];
+                    document.getElementById("NOD").value = roomInfo[3];
+                    createInnerForm();
+                    setPlayerNames(roomInfo[4]);
+                    break;
                 case "room created":
                     console.log("received room created");
                     roomNumber = values;
+                    createInnerForm();
                     break;
 
                 case "end turn":
                     console.log("received end turn");
-                    //call end turn
+                    endTurnButtonClicked();
                     break;
 
                 case "roll dice":
                     console.log("received roll dice");
-                    //call roll dice
+                    rollDiceButtonClicked();
                     break;
 
                 case "owner left":
                     console.log("received owner left");
-                    //reset to lobby
+                    resetForm();
                     break;
 
                 default:
@@ -65,6 +75,11 @@ var PigGameView = (function() {
             console.log("Disconnected - status " + this.readyState);
         };
 
+        function sendMessage(msg)
+        {
+            console.log("Sending message to server : " + msg);
+            socket.send(msg);
+        }
 
         /*
          * Sets a cookie with the specified form
@@ -119,11 +134,11 @@ var PigGameView = (function() {
                 }
                 else {
                     error = false;
-                    createInnerForm();
+                    sendMessage("create room:" + NOP + "," + PTW + "," + NOD + "," + document.getElementById("pName").value);
                 }
             } 
             else
-                resetForm();
+                sendMessage("delete room:" + roomNumber);
         };
 
         /*
@@ -138,20 +153,45 @@ var PigGameView = (function() {
             error = true;
         }
 
+        function sendStartGame(event)
+        {
+            event.preventDefault();
+            socket.send("start game:" + roomNumber);
+        }
+
+        function sendEndTurn(event)
+        {
+            event.preventDefault();
+            socket.send("end turn:" + roomNumber);
+        }
+
+        function sendRollDice(event)
+        {
+            event.preventDefault();
+            socket.send("roll dice:" + roomNumber);
+        }
+
+        function sendJoin(roomPressed, event) {
+            event.preventDefault();
+            console.log("join room:" + roomPressed);
+            socket.send("join room:" + roomPressed);
+        }
+
         /*
          *   Creates the form for user to insert player
          *   names and start the game.
          */
         var createInnerForm = function () {
-
-            //TODO: Call Server to set up Room
-            socket.send("create room");
-
             /*Hiding the Settings Box*/
             document.getElementById("Settings").style.display = 'none';
 
             /*Getting Preferred Color*/
             preferredColor = document.getElementsByTagName("fieldset")[0].style.borderColor;
+
+            if (document.getElementById("Inner Form").hasChildNodes()) {
+                document.getElementById("Inner Form").removeChild(document.getElementById("Inner Form").children[0]);
+            }
+
 
             /*Setting up Player Name HTML*/
             var playerForm = document.createElement("form");
@@ -175,7 +215,7 @@ var PigGameView = (function() {
             submitButton.appendChild(codeText);
             playerForm.appendChild(submitButton);
             document.getElementById("Inner Form").appendChild(playerForm);
-            document.getElementById("Inner Form").addEventListener("submit", startGame);
+            document.getElementById("Inner Form").addEventListener("click", sendStartGame);
 
             /*Setting Preferred Name to Player 0 Spot*/
             if (document.getElementById("pName").value != "") {
@@ -186,7 +226,23 @@ var PigGameView = (function() {
             /*Changing set to reset event listener*/
             set = true;
             document.getElementById("submit").children[0].textContent = "Reset";
+
+            /* set input fields to unmodifiable until reset is pressed.*/
+            document.getElementById("NOP").setAttribute('readonly', "readonly");
+            document.getElementById("PTW").setAttribute('readonly', "readonly");
+            document.getElementById("NOD").setAttribute('readonly', "readonly");
+
         };
+
+        function setPlayerNames(playerNames) {
+            var names = playerNames.split(" ");
+            console.log(names);
+            console.log(document.getElementById("Inner Form").children[0].getElementsByTagName("input"));
+            var playerInputs = document.getElementById("Inner Form").children[0].getElementsByTagName("input");
+            for (var i = 0; i < playerInputs.length; i++){
+                playerInputs[i].value = names[i];
+            }
+        }
 
         /*
          *   Resets the form if a user wants to make
@@ -194,7 +250,10 @@ var PigGameView = (function() {
          */
         var resetForm = function () {
 
-            //TODO: Kick everyone out of room and back to setUp View
+            /* set input fields to modifiable until reset is pressed.*/
+            document.getElementById("NOP").removeAttribute('readonly');
+            document.getElementById("PTW").removeAttribute('readonly');
+            document.getElementById("NOD").removeAttribute('readonly');
 
             /*Resetting Outer Form Values for Reset*/
             document.getElementById("NOP").value = "";
@@ -217,14 +276,7 @@ var PigGameView = (function() {
          *   Starts the Game by calling the Pig Game View
          *   and creating the UI by manipulating the DOM
          */
-        var startGame = function (event) {
-
-            //TODO: Send message to everyone that game is starting and to update their views to the appropriate screen
-            socket.send("start game:" + roomNumber);
-
-
-            event.preventDefault();
-
+        var startGame = function () {
             setCookie();
 
             /*Hiding "setUp" HTML*/
@@ -250,15 +302,15 @@ var PigGameView = (function() {
 
 
             control = PigGameControl.init(playerNames, NOD, PTW);
+            control.setDiceSeeds(roomNumber);
             dice = control.getAllDice();
             players = control.getAllPlayers();
             console.log(players);
 
-            //TODO: Instead of hooking up these buttons, wait for server response
-            document.getElementById("RD").addEventListener("click", rollDiceButtonClicked);
-            document.getElementById("END").addEventListener("click", endTurnButtonClicked);
-            document.getElementById("RESET").addEventListener("click", resetButtonClicked);
-            document.getElementById("AUTO").addEventListener("click", playGameAutomagicallyInterval);
+            document.getElementById("RD").addEventListener("click", sendRollDice);
+            document.getElementById("END").addEventListener("click", sendEndTurn);
+            //document.getElementById("RESET").addEventListener("click", resetButtonClicked);
+            //document.getElementById("AUTO").addEventListener("click", playGameAutomagicallyInterval);
         };
 
         /*Prints Current Process to Screen*/
@@ -338,14 +390,25 @@ var PigGameView = (function() {
             }
         }
 
+        function updateButtonAccess() {
+            if (control.getAllPlayers()[control.getCurrentPlayerNumber()].getName() == preferredName) {
+                document.getElementById("RD").disabled = false;
+                document.getElementById("END").disabled = false;
+            }
+            else {
+                document.getElementById("RD").disabled = true;
+                document.getElementById("END").disabled = true;
+            }
+        }
+
         /*Roll Dice Game Button*/
         function rollDiceButtonClicked() {
-            console.log("Button Clicked");
             control.rollDice();
             printGameOutput();
             printScores();
             updateAccumulator();
             updateDice();
+            updateButtonAccess();
         }
 
         /*End Turn Game Button*/
@@ -354,6 +417,7 @@ var PigGameView = (function() {
             printGameOutput();
             printScores();
             updateAccumulator();
+            updateButtonAccess();
         }
 
         /*Auto Play Game Button*/
@@ -395,7 +459,8 @@ var PigGameView = (function() {
 
         /*Public View Methods*/
         return {
-            validateInput : validateInput
+            validateInput : validateInput,
+            sendJoin : sendJoin
         }
     }; //end constructor
 

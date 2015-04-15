@@ -41,7 +41,7 @@ class echoServer extends WebSocketServer
         }
 
         $values = $split[1];
-        $count = count($this->rooms);
+        //$count = count($this->rooms);
 
         switch ($command) {
             case "create room":
@@ -49,10 +49,24 @@ class echoServer extends WebSocketServer
                 break;
 
             case "join room":
+                $this->joinRoom($user, $values);
 
+                $roomNumber = $values;
+                $room = $this->rooms[$roomNumber];
+                $roomInfoMessage = "joined room:" . $roomNumber . "," . $room->getNumOfPlayers() . "," . $room->getScoreToWin() . "," . $room->getNumOfDice() . ",";
+
+                foreach ($this->rooms[$roomNumber]->getUsers() as $user2) {
+                    $roomInfoMessage = $roomInfoMessage . $user2->name . " ";
+                }
+                echo "$roomInfoMessage\n";
+                $this->sendMessageToAllClientsInTheSameRoomName($roomInfoMessage, $roomNumber);
                 break;
 
             case "delete room":
+
+                break;
+
+            case "player quit":
 
                 break;
 
@@ -72,6 +86,7 @@ class echoServer extends WebSocketServer
                 $name = $split[1];
                 $user->name = $name;
                 break;
+
 
             default:
 
@@ -122,9 +137,10 @@ class echoServer extends WebSocketServer
     //    $this->send($user2, $message);
     //}
 
-    private function createRoom($user, $roomInfo) {
-        echo "creating new room\n";
-        $split = explode($roomInfo, ",");
+    private function createRoom($user, $roomInfo)
+    {
+        var_dump($this->rooms);
+        $split = explode(",", $roomInfo);
         $NOP = $split[0];
         $PTW = $split[1];
         $NOD = $split[2];
@@ -132,25 +148,35 @@ class echoServer extends WebSocketServer
         $roomNumber = $this->roomsDAO->insertIntoTable($NOP, $NOD, $PTW, $roomOwner); // DAO SQL structure slightly diff than view
         $this->rooms[$roomNumber] = new Room($NOP, $PTW, $NOD, $roomOwner);
 
+        var_dump($this->rooms);
         $this->joinRoom($user, $roomNumber);
         $this->send($user, "room created:$roomNumber");
     }
 
-    private function joinRoom($user, $roomNumber){
-        $this->rooms[$roomNumber]->addUser($user);
-        $this->roomsJoinedDAO->insertIntoTable($roomNumber, $user->name);
+    private function joinRoom($user, $roomNumber)
+    {
+        if (count($this->rooms[$roomNumber]->getUsers()) >= $this->rooms[$roomNumber]->getNumOfPlayers()) {
+            $this->send($user, "room full:$roomNumber");
+        } else {
+            $this->rooms[$roomNumber]->addUser($user);
+            $this->roomsJoinedDAO->insertIntoTable($roomNumber, $user->name);
+            var_dump($this->rooms);
+        }
     }
 
-    private function leaveRoom($user, $roomNumber) {
+    private function leaveRoom($user, $roomNumber)
+    {
         $this->rooms[$roomNumber]->removeUser($user);
     }
 
-    private function deleteRoom($user, $roomNumber) {
+    private function deleteRoom($user, $roomNumber)
+    {
 
     }
 
-    private function sendMessageToAllClientsInTheSameRoomName($message, $roomNumber) {
-        foreach ($this->rooms[$roomNumber]->users as $user2) {
+    private function sendMessageToAllClientsInTheSameRoomName($message, $roomNumber)
+    {
+        foreach ($this->rooms[$roomNumber]->getUsers() as $user2) {
             $this->send($user2, $message);
         }
     }
